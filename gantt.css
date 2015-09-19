@@ -21,10 +21,6 @@ body {
 	shape-rendering: crispEdges;
 }
  
-.bar {
-	fill: #669900;
-}
- 
 .bar-failed {
 	fill: #CC0000;
 }

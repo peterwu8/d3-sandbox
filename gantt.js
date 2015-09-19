@@ -26,7 +26,7 @@ var tasks = [
 {"startDate":new Date("Sat Dec 08 23:12:24 EST 2012"),"endDate":new Date("Sun Dec 09 00:26:13 EST 2012"),"taskName":"A Job","status":"KILLED"}];
 
 var taskStatus = {
-    "SUCCEEDED" : "bar",
+    "SUCCEEDED" : "bar-succeeded",
     "FAILED" : "bar-failed",
     "RUNNING" : "bar-running",
     "KILLED" : "bar-killed"
