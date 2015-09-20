@@ -44,11 +44,8 @@ body {
 * {
 	background-color:#FFFFFF
 }
-p {
-	margin: 0 auto !important;
-}
+
 h1 {
-	margin: 0 auto !important;
 	font-family: Orbitron;
 	font-size: 24px;
 	font-style: normal;
@@ -63,5 +60,5 @@ h3 {
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 500;
-	margin: 14px 0px 0px 80px;
+	margin: 1px 0px 0px 80px;
 }
