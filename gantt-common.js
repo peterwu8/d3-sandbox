@@ -28,17 +28,17 @@ d3.gantt = function() {
     };
 
     var rectTransform = function(d) {
-	return "translate(" + x(d.startDate) + "," + y(d.taskName) + ")";
+	return "translate(" + xScale(d.startDate) + "," + yScale(d.taskName) + ")";
     };
 
-    var x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
+    var xScale = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
 
-    var y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
+    var yScale = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
     
-    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
+    var xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
 	    .tickSize(8).tickPadding(8);
 
-    var yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+    var yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0);
 
     var initTimeDomain = function() {
 	if (timeDomainMode === FIT_TIME_DOMAIN_MODE) {
@@ -59,12 +59,12 @@ d3.gantt = function() {
     };
 
     var initAxis = function() {
-	x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
-	y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
-	xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
+	xScale = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
+	yScale = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height - margin.top - margin.bottom ], .1);
+	xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
 		.tickSize(8).tickPadding(8);
 
-	yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+	yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0);
     };
     
     function gantt(tasks) {
@@ -95,14 +95,14 @@ d3.gantt = function() {
 	     }) 
 	 .attr("y", 0)
 	 .attr("transform", rectTransform)
-	 .attr("height", function(d) { return y.rangeBand(); })
+	 .attr("height", function(d) { return yScale.rangeBand(); })
 	 .attr("width", function(d) { 
-	     return (x(d.endDate) - x(d.startDate)); 
+	     return (xScale(d.endDate) - xScale(d.startDate)); 
 	     });
 	 
 	 bar.append("text")
 	    .attr("x", function(d) {
-	    	return (x(d.endDate) - x(d.startDate)); 
+	    	return (xScale(d.endDate) - xScale(d.startDate)); 
 	     })
 	    .attr("y", 8)
 	    .attr("dy", "8px")
@@ -145,16 +145,16 @@ d3.gantt = function() {
 	 .transition()
 	 .attr("y", 0)
 	 .attr("transform", rectTransform)
-	 .attr("height", function(d) { return y.rangeBand(); })
+	 .attr("height", function(d) { return yScale.rangeBand(); })
 	 .attr("width", function(d) { 
-	     return (x(d.endDate) - x(d.startDate)); 
+	     return (xScale(d.endDate) - xScale(d.startDate)); 
 	     });
 
         rect.transition()
           .attr("transform", rectTransform)
-	 .attr("height", function(d) { return y.rangeBand(); })
+	 .attr("height", function(d) { return yScale.rangeBand(); })
 	 .attr("width", function(d) { 
-	     return (x(d.endDate) - x(d.startDate)); 
+	     return (xScale(d.endDate) - xScale(d.startDate)); 
 	     });
         
 	rect.exit().remove();
