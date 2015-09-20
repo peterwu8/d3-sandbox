@@ -83,9 +83,10 @@ d3.gantt = function() {
 	.attr("height", height + margin.top + margin.bottom)
 	.attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 	
-      svg.selectAll(".chart")
+      var bar = svg.selectAll(".chart")
 	 .data(tasks, keyFunction).enter()
-	 .append("rect")
+
+	 bar.append("rect")
 	 .attr("rx", 5)
          .attr("ry", 5)
 	 .attr("class", function(d){ 
@@ -99,7 +100,12 @@ d3.gantt = function() {
 	     return (x(d.endDate) - x(d.startDate)); 
 	     });
 	 
-	 
+/*	 bar.append("text")
+	    .attr("x", function(d) { return x(d) - 3; })
+	    .attr("y", barHeight / 2)
+	    .attr("dy", ".35em")
+	    .text(function(d) { return d; });
+*/
 	 svg.append("g")
 	 .attr("class", "x axis")
 	 .attr("transform", "translate(0, " + (height - margin.top - margin.bottom) + ")")
