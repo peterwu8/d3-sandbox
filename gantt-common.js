@@ -104,12 +104,19 @@ d3.gantt = function() {
 	    .attr("x", function(d) {
 	    	return (xScale(d.endDate) - xScale(d.startDate)); 
 	     })
-	    .attr("y", 8)
+	    .attr("y", 3)
 	    .attr("dy", "8px")
 	 .attr("transform", rectTransform)
 	    .text(function(d) {
-	    	var hours = Math.abs(d.endDate - d.startDate) / 36e5;
-	    	return (Math.round(hours * 10) / 10) + "hrs";
+	        var diff = Math.abs(d.endDate - d.startDate);
+	        var hours = diff / 36e5;
+	        var format = "hrs";
+	        var final = (Math.round(hours * 10) / 10);
+	        if (final < 1) {
+	            final = (diff / 1000) / 60;
+	            format = "mins";
+	        }
+	        return (Math.round(final * 10) / 10) + format;
 	    });
 
 	 svg.append("g")
