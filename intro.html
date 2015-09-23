@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>intro</title>
+	<link type="text/css" href="gantt-common.css" rel="stylesheet" />
+	<link type="text/css" href="gantt.css" rel="stylesheet" />
+    <script type="text/javascript" src="d3/d3.min.js"></script>
+	<script type="text/javascript" src="d3/gantt-chart-d3v2.js"></script>
+</head>
+<body>
+	<p></p>
+	<p></p>
+	<script type="text/javascript">
+	var p = d3.select("body").selectAll("p")
+	    .data([4, 8, 15, 16, 23, 42])
+	p.text(function(d) {
+		return "I am number " + d + "!";
+	});
+	p.enter().append("p")
+	.text(function(d, i) {
+		return "I am number " + d + "." + i + "!";
+	});
+	p.text(function(d) {
+		return "Actually " + d + "!";
+	});
+	d3.select("body").selectAll("p").text(function(d) {
+		return "Err... " + d + "!";
+	});
+	d3.selectAll("p").text(function(d, i) {
+		return "Finally... " + d + "/" + i + "!";
+	});
+	var margin = {top: 10, right: 20, bottom: 20, left: 60},
+	    width = 960 - margin.left - margin.right,
+	    height = 500 - margin.top - margin.bottom;
+	var svg = d3.select("body")
+		.append("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	svg.selectAll("text")
+	.data([100, 200])
+	.enter()
+	.append("text")
+	.attr("fill", "red")
+	.attr("y", function(d, i) {
+		return (i * 15);
+	})
+	.text(function (d, i) {
+		return "SVG text: " + d + "/" + i + "!";
+	});
+	</script>
+</body>
+</html>

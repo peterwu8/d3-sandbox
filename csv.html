@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Gantt Chart Example 1</title>
+	<link type="text/css" href="gantt-common.css" rel="stylesheet" />
+	<link type="text/css" href="gantt.css" rel="stylesheet" />
+    <script type="text/javascript" src="d3/d3.min.js"></script>
+	<script type="text/javascript" src="d3/gantt-chart-d3v2.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		d3.csv("cities.csv", function(d) {
+		  return {
+		    city : d.city,
+		    state : d.state,
+		    population : +d.population,
+		    land_area : +d["land area"]
+		  };
+		}, function(data) {
+			data.forEach(function (d) {
+				console.log(d);
+			})
+		});	
+	</script>
+</body>
+</html>
