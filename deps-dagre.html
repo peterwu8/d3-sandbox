@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        .link {
+            fill: none;
+            stroke: red;
+            stroke-width: 1.5px;
+        }
+
+        #licensing {
+            fill: green;
+        }
+
+        .link.licensing {
+            stroke: green;
+        }
+
+        .link.resolved {
+            stroke-dasharray: 0,2 1;
+        }
+
+        circle {
+            fill: #ccc;
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        text {
+            font: 12px sans-serif;
+            pointer-events: none;
+            text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+        }
+
+/* This sets the color for "TK" nodes to a light blue green. */
+g.type-TK > rect {
+  fill: #00ffd0;
+}
+
+text {
+  font-weight: 300;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serf;
+  font-size: 14px;
+}
+
+.node rect {
+  stroke: #999;
+  fill: #fff;
+  stroke-width: 1.5px;
+}
+
+.edgePath path {
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+    </style>
+    <title>Simplified ACDS Dependency DAG (Cabbage 1.24)</title>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Orbitron" />
+    <script type="text/javascript" src="d3/d3.min.js"></script>
+    <script type="text/javascript" src="graphlib-dot.js"></script>
+    <script type="text/javascript" src="dagre-d3.js"></script>
+</head>
+<body>
+    <div>
+        <h1 style="text-align: center; margin-top: .22em; margin-bottom: 0">Simplified ACDS Dependency DAG</h1>
+        <p style="text-align: center; margin-top: 0; margin-bottom: 0">
+            Cabbage 1.24 (<a href="https://sw-wiki.altera.com/twiki/bin/view/Software/AcdsGlobalBuildDependencies">wiki</a>)<br>Edges have been pruned for readibility.</p>
+        </p>
+    </div>
+    <script>
+        var width = 2500,
+            height = 900;
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+// Create the input graph
+var g = new dagreD3.graphlib.Graph()
+  .setGraph({})
+  .setDefaultEdgeLabel(function() { return {}; });
+  g.graph().width = width;
+  g.graph().height = height;
+
+// Here we"re setting nodeclass, which is used by our custom drawNodes function
+// below.
+g.setNode(0,  { label: "acdskitpublish",       class: "type-NODE" });
+g.setNode(1,  { label: "acdspublish",       class: "type-NODE" });
+g.setNode(2,  { label: "acdspublish32",       class: "type-NODE" });
+g.setNode(3,  { label: "acl",       class: "type-NODE" });
+g.setNode(4,  { label: "ib_installer",       class: "type-NODE" });
+g.setNode(5,  { label: "cusp",       class: "type-NODE" });
+g.setNode(6,  { label: "ip_coregen",       class: "type-NODE" });
+g.setNode(7,  { label: "devdata",       class: "type-NODE" });
+g.setNode(8,  { label: "quartusddb",       class: "type-NODE" });
+g.setNode(9,  { label: "devdata_itest",       class: "type-NODE" });
+g.setNode(10,  { label: "dsp",       class: "type-NODE" });
+g.setNode(11,  { label: "embedded",       class: "type-NODE" });
+g.setNode(12,  { label: "exampledesigns",       class: "type-NODE" });
+g.setNode(13,  { label: "ip_deploy",       class: "type-NODE" });
+g.setNode(14,  { label: "sopc_unit_tests",       class: "type-NODE" });
+g.setNode(15,  { label: "qsys_unit_tests",       class: "type-NODE" });
+g.setNode(16,  { label: "sopc_pro_unit_tests",       class: "type-NODE" });
+g.setNode(17,  { label: "jneye",       class: "type-NODE" });
+g.setNode(18,  { label: "modelsim_compile",       class: "type-NODE" });
+g.setNode(19,  { label: "modelsim_nll_tag",       class: "type-NODE" });
+g.setNode(20,  { label: "modelsim_tq",       class: "type-NODE" });
+g.setNode(21,  { label: "nios2gnu",       class: "type-NODE" });
+g.setNode(22,  { label: "nios2sopc",       class: "type-NODE" });
+g.setNode(23,  { label: "nios2sbt4e",       class: "type-NODE" });
+g.setNode(24,  { label: "nios2sbt4e_unit_tests",       class: "type-NODE" });
+g.setNode(25,  { label: "nios2sopc_test_kit",       class: "type-NODE" });
+g.setNode(26,  { label: "ssg",       class: "type-NODE" });
+g.setNode(27,  { label: "qsys",       class: "type-NODE" });
+g.setNode(28,  { label: "quartus_bin",       class: "type-NODE" });
+g.setNode(29,  { label: "quartus_pgo",       class: "type-NODE" });
+g.setNode(30,  { label: "quartus_tq",       class: "type-NODE" });
+g.setNode(31,  { label: "quartus_postdev",       class: "type-NODE" });
+g.setNode(32,  { label: "quartus_rtl_tag",       class: "type-NODE" });
+g.setNode(33,  { label: "quartuskitpublish",       class: "type-NODE" });
+g.setNode(34,  { label: "testkits",       class: "type-NODE" });
+g.setNode(35,  { label: "version",       class: "type-NODE" });
+g.setNode(36,  { label: "webhelp",       class: "type-NODE" });
+
+
+g.nodes().forEach(function(v) {
+  var node = g.node(v);
+  // Round the corners of the nodes
+  node.rx = node.ry = 5;
+});
+
+// Set up edges, no special attributes.
+g.setEdge(3, 4);
+g.setEdge(5, 6);
+g.setEdge(7, 8);
+g.setEdge(7, 9);
+g.setEdge(10, 3);
+g.setEdge(10, 0);
+g.setEdge(11, 4);
+g.setEdge(4, 2);
+g.setEdge(4, 1);
+g.setEdge(6, 13);
+g.setEdge(6, 10);
+g.setEdge(13, 11);
+g.setEdge(13, 3);
+g.setEdge(13, 12);
+g.setEdge(13, 14);
+g.setEdge(13, 0);
+g.setEdge(13, 15);
+g.setEdge(13, 16);
+g.setEdge(17, 4);
+g.setEdge(18, 19);
+g.setEdge(19, 20);
+g.setEdge(20, 4);
+g.setEdge(20, 0);
+g.setEdge(21, 22);
+g.setEdge(23, 24);
+g.setEdge(22, 25);
+g.setEdge(22, 23);
+g.setEdge(22, 5);
+g.setEdge(22, 26);
+g.setEdge(25, 12);
+g.setEdge(27, 15);
+g.setEdge(28, 22);
+g.setEdge(28, 27);
+g.setEdge(28, 8);
+g.setEdge(28, 17);
+g.setEdge(28, 9);
+g.setEdge(29, 30);
+g.setEdge(31, 32);
+g.setEdge(31, 29);
+g.setEdge(32, 30);
+g.setEdge(32, 18);
+g.setEdge(30, 6);
+g.setEdge(30, 33);
+g.setEdge(30, 26);
+g.setEdge(8, 31);
+g.setEdge(33, 4);
+g.setEdge(33, 0);
+g.setEdge(34, 28);
+g.setEdge(35, 7, { label: "Hello world"});
+g.setEdge(35, 21);
+g.setEdge(35, 36);
+g.setEdge(35, 34);
+g.setEdge(36, 28);
+
+
+// Create the renderer
+var render = new dagreD3.render();
+
+// Set up an SVG group so that we can translate the final graph.
+var svg = d3.select("svg"),
+    svgGroup = svg.append("g");
+
+// Run the renderer. This is what draws the final graph.
+render(d3.select("svg g"), g);
+
+// Center the graph
+var xCenterOffset = (svg.attr("width") - g.graph().width) / 2;
+svgGroup.attr("transform", "translate(" + xCenterOffset + ", 20)");
+svg.attr("height", g.graph().height + 40);
+
+    </script>
+</body>
+</html>
+
